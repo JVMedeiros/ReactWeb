@@ -1,57 +1,73 @@
-import React from 'react';
+import React , { useState, FormEvent } from 'react';
+
+// API
+import api from '../../services/api';
 
 // Images
 import logoImg from '../../assets/logo.svg';
 
 // Styles
 import { Title, Form, Repositories } from './styles';
-import Repository from '../repository';
 import { FiChevronRight } from 'react-icons/fi';
 
+
+interface Repository {
+  full_name: string;
+  description: string;
+  owner: {
+    login: string;
+    avatar_url: string;
+  };
+
+}
 const Dashboard: React.FC = () => {
+  const [newRepo, setNewRepo] = useState('');
+  const [repositories, setRepositories] = useState<Repository[]>([]);
+
+  async function handleAddRepository(event: FormEvent<HTMLFormElement>,): Promise<void> {
+    event.preventDefault();
+
+    const response = await api.get(`repos/${newRepo}`);
+
+    const repository = response.data;
+
+    setRepositories([...repositories, repository]);
+    setNewRepo('')
+  }
+
   return (
     <>
       {/* Header Container */}
       <img src={logoImg} alt="Github Explorer"/>
-      <Title>Explore repositórios no GitHub!</Title>
+      <Title>Explore repositórios no Github!</Title>
 
       {/* Search box Container */}
-      <Form>
-        <input placeholder="Digite o nome do repositório"/>
+      <Form onSubmit={handleAddRepository}>
+        <input
+          value={newRepo}
+          onChange={ (e) => setNewRepo(e.target.value)}
+          placeholder="Digite o nome do repositório"
+        />
         <button type="submit">Pesquisar</button>
       </Form>
 
       {/* Repositories/Page content Container */}
       <Repositories>
-        <a href="">
-          <img src="https://avatars2.githubusercontent.com/u/53566373?s=460&u=8fcb0053a67405818a52bfcbfdaab00f4eb08d6d&v=4" alt="João Medeiros"/>
+        {repositories.map(repository => (
+        <a key={repository.full_name} href="teste">
+          <img
+            src={repository.owner.avatar_url}
+            alt={repository.owner.login}
+          />
           <div>
-            <strong>Zappts/iClubs</strong>
-            <p>An easy way to help ONGs</p>
+            <strong>{repository.full_name}</strong>
+            <p>{repository.description}</p>
           </div>
           <FiChevronRight/>
         </a>
-
-        <a href="">
-          <img src="https://avatars2.githubusercontent.com/u/53566373?s=460&u=8fcb0053a67405818a52bfcbfdaab00f4eb08d6d&v=4" alt="João Medeiros"/>
-          <div>
-            <strong>Zappts/iClubs</strong>
-            <p>An easy way to help ONGs</p>
-          </div>
-          <FiChevronRight/>
-        </a>
-
-        <a href="">
-          <img src="https://avatars2.githubusercontent.com/u/53566373?s=460&u=8fcb0053a67405818a52bfcbfdaab00f4eb08d6d&v=4" alt="João Medeiros"/>
-          <div>
-            <strong>Zappts/iClubs</strong>
-            <p>An easy way to help ONGs</p>
-          </div>
-          <FiChevronRight/>
-        </a>
-
+        ))}
       </Repositories>
-    </>
+      </>
   );
 };
 
