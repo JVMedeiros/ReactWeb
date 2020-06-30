@@ -10,5 +10,6 @@ export default createGlobalStyle `
 
 body {
   background: #f0f0f5;
+  -webkit-font-smoothing: antialiased;
 }
 `;
