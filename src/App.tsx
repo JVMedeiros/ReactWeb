@@ -4,10 +4,15 @@ import { BrowserRouter } from 'react-router-dom';
 // Routes
 import Routes from './routes';
 
+//Styles
+import GlobalStyle from './styles/global';
 
 const App: React.FC = () => (
-  <BrowserRouter>
-    <Routes />;
-  </BrowserRouter>
+  <>
+    <BrowserRouter>
+      <Routes />;
+    </BrowserRouter>
+    <GlobalStyle />
+  </>
 );
 export default App;
