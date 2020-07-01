@@ -7,7 +7,7 @@ import api from '../../services/api';
 import logoImg from '../../assets/logo.svg';
 
 // Styles
-import { Title, Form, Repositories } from './styles';
+import { Title, Form, Repositories, Error } from './styles';
 import { FiChevronRight } from 'react-icons/fi';
 
 
@@ -22,17 +22,28 @@ interface Repository {
 }
 const Dashboard: React.FC = () => {
   const [newRepo, setNewRepo] = useState('');
+  const [inputError, setInputError] = useState('');
   const [repositories, setRepositories] = useState<Repository[]>([]);
 
   async function handleAddRepository(event: FormEvent<HTMLFormElement>,): Promise<void> {
     event.preventDefault();
+
+    if (!newRepo) {
+      setInputError('Digite o autor/nome do repositório');
+      return;
+    }
+
+    try {
 
     const response = await api.get(`repos/${newRepo}`);
 
     const repository = response.data;
 
     setRepositories([...repositories, repository]);
-    setNewRepo('')
+    setNewRepo('');
+    } catch (err) {
+      setInputError('Repositório não encontrado');
+    }
   }
 
   return (
@@ -50,6 +61,9 @@ const Dashboard: React.FC = () => {
         />
         <button type="submit">Pesquisar</button>
       </Form>
+
+      {/* Conditional in case of error at finding repo */}
+      { inputError && <Error>{inputError}</Error>}
 
       {/* Repositories/Page content Container */}
       <Repositories>
