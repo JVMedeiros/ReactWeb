@@ -29,7 +29,7 @@ input {
   border-right: 0px;
 
   ${(props) => props.hasError && css `
-    border-color: #c53030;
+    border-color: #C53035;
   `}
 
   &::placeholder {
