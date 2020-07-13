@@ -55,7 +55,7 @@ const Dashboard: React.FC = () => {
       <Title>Explore repositórios no Github!</Title>
 
       {/* Search box Container */}
-      <Form onSubmit={handleAddRepository}>
+      <Form hasError={!! inputError}onSubmit={handleAddRepository}>
         <input
           value={newRepo}
           onChange={ (e) => setNewRepo(e.target.value)}
