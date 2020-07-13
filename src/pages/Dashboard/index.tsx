@@ -25,7 +25,9 @@ const Dashboard: React.FC = () => {
   const [inputError, setInputError] = useState('');
   const [repositories, setRepositories] = useState<Repository[]>([]);
 
-  async function handleAddRepository(event: FormEvent<HTMLFormElement>,): Promise<void> {
+  async function handleAddRepository(
+    event: FormEvent<HTMLFormElement>,
+    ): Promise<void> {
     event.preventDefault();
 
     if (!newRepo) {
