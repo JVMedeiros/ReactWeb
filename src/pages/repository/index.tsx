@@ -55,8 +55,8 @@ return (
     <Issues>
       <Link to="huashua" >
         <div>
-          <strong>{repository.full_name}</strong>
-          <p>{repository.description}</p>
+          <strong>BOMDIA</strong>
+          <p>O SOL JÁ NASCEU LÁ NA FAZENDINHA</p>
         </div>
         <FiChevronRight size={20} />
       </Link>
