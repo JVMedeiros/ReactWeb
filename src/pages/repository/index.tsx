@@ -1,8 +1,14 @@
 import React from 'react';
 
-//Routes/API
-import { useRouteMatch } from 'react-router-dom';
+//Images
+import logoImg from '../../assets/logo.svg';
 
+//Routes/API
+import { useRouteMatch, Link } from 'react-router-dom';
+
+//Styles
+import { Header, RepositoryInfo, Issues } from './styles';
+import { FiChevronsLeft, FiChevronRight } from 'react-icons/fi';
 
 interface RepositoryParams {
   repository: string;
@@ -10,7 +16,53 @@ interface RepositoryParams {
 const Repository: React.FC = () => {
   const { params } = useRouteMatch<RepositoryParams>();
 
-return <h1>Respository:{params.repository}</h1>;
+return (
+  <>
+    {/* Logo and back container */}
+    <Header>
+      <img src={logoImg} alt="Github Explorer" />
+      <Link to="/">
+        <FiChevronsLeft size={16} />
+        Voltar
+      </Link>
+    </Header>
+
+    {/* Repository's header */}
+    <RepositoryInfo>
+      <header>
+        <img src="https://avatars0.githubusercontent.com/u/28929274?v=4" alt="RocketSeat" />
+        <div>
+          <strong>RocketSeat/Unform</strong>
+          <p>Descirção do repositório</p>
+        </div>
+      </header>
+      <ul>
+        <li>
+          <strong>1800</strong>
+          <span>Stars</span>
+        </li>
+        <li>
+          <strong>47</strong>
+          <span>Forks</span>
+        </li>
+        <li>
+          <strong>60</strong>
+          <span>Issues abertas</span>
+        </li>
+      </ul>
+    </RepositoryInfo>
+
+    <Issues>
+      <Link to="huashua" >
+        <div>
+          <strong>{repository.full_name}</strong>
+          <p>{repository.description}</p>
+        </div>
+        <FiChevronRight size={20} />
+      </Link>
+    </Issues>
+  </>
+);
 
 };
 
