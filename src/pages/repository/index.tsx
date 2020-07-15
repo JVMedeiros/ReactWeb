@@ -26,20 +26,27 @@ interface Repository {
     avatar_url: string;
   };
 }
+interface Issue {
+  id: number;
+  title: string;
+  user: {
+    login: string;
+  }
+}
 
 const Repository: React.FC = () => {
-  const [repository, setRepository] = useState<Repository>(null);
-  const [issues, setIssues] = useState([]);
+  const [repository, setRepository] = useState<Repository | null>(null);
+  const [issues, setIssues] = useState<Issue[]>([]);
   const { params } = useRouteMatch<RepositoryParams>();
 
   useEffect(() => {
 
     api.get(`repos/${params.repository}`).then((response) => {
-      console.log(response.data);
+      setRepository(response.data);
     });
 
     api.get(`repos/${params.repository}/issues`).then((response) => {
-      console.log(response.data);
+      setIssues(response.data);
     });
 
 //    The code below is a way to make a requisition from API
@@ -50,8 +57,8 @@ const Repository: React.FC = () => {
 //        api.get(`repos/${params.repository}/issues`)
 //      ]);
 //    }
-
-      loadData();
+//
+//      loadData();
   }, [params.repository]);
 
   return (
@@ -66,30 +73,34 @@ const Repository: React.FC = () => {
       </Header>
 
       {/* Repository's header */}
-      <RepositoryInfo>
-        <header>
-          <img src="https://avatars0.githubusercontent.com/u/28929274?v=4" alt="RocketSeat" />
-          <div>
-            <strong>RocketSeat/Unform</strong>
-            <p>Descirção do repositório</p>
-          </div>
-        </header>
-        <ul>
-          <li>
-            <strong>1800</strong>
-            <span>Stars</span>
-          </li>
-          <li>
-            <strong>47</strong>
-            <span>Forks</span>
-          </li>
-          <li>
-            <strong>60</strong>
-            <span>Issues abertas</span>
-          </li>
-        </ul>
-      </RepositoryInfo>
-
+      { repository && (
+        <RepositoryInfo>
+          <header>
+            <img
+            src={repository.owner.avatar_url}
+            alt={repository.owner.login}
+            />
+            <div>
+              <strong>{repository.full_name}</strong>
+              <p>{repository.description}</p>
+            </div>
+          </header>
+          <ul>
+            <li>
+              <strong>{repository.stargazers_count}</strong>
+              <span>Stars</span>
+            </li>
+            <li>
+              <strong>{repository.forks_count}</strong>
+              <span>Forks</span>
+            </li>
+            <li>
+              <strong>{repository.open_issues_count}</strong>
+              <span>Issues abertas</span>
+            </li>
+          </ul>
+        </RepositoryInfo>
+      )}
       <Issues>
         <Link to="huashua" >
           <div>
